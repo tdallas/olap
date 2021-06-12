@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS baggage(
     quantity INTEGER,
     weight INTEGER,
     weight_unit VARCHAR(10)
+    included BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS itinerary(
