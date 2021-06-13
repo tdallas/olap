@@ -41,19 +41,18 @@ CREATE TABLE IF NOT EXISTS technicalstop(
 );
 
 CREATE TABLE IF NOT EXISTS itinerarydate(
-    timestamp_id SERIAL PRIMARY KEY,
+    date_id SERIAL PRIMARY KEY,
     timezone VARCHAR(100),
     day INTEGER,
     month INTEGER,
     year INTEGER,
-    trimester INTEGER,
     minute INTEGER,
     hour INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS segment (
     segment_id SERIAL PRIMARY KEY,
-    flight_duration INTEGER, -- in minutes
+    flight_duration INTEGER, -- in hours
     baggage_id INTEGER REFERENCES(baggage),
     itinerary_id INTEGER REFERENCES(itinerary)
 );

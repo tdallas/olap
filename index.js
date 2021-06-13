@@ -35,9 +35,34 @@ const filteredAirports = airportsJson
       !!countries_to_consider.find((country) => airport.country == country)
   );
 
-const { generatePlaces } = require("./generator");
-const { airports, cities, countries } = generatePlaces(filteredAirports);
+const {
+  generatePlaces,
+  arrayToMap,
+  generateItineraries,
+} = require("./generator");
 
-console.log("without duplicates airports", airports.length);
-console.log("without duplicates cities", cities.length);
-console.log("without duplicates countries", countries.length);
+const { airports, cities, countries } = generatePlaces(filteredAirports);
+const priceLimit = { lowPrice: 10000, maxPrice: 150000 };
+const dateLimit = {
+  lowYear: new Date(2020, 0, 1),
+  maxYear: new Date(2022, 0, 1),
+};
+
+const stopsProbability = 0.3;
+
+// 10 million itineraries
+const quantity = 2;
+
+const itineraries = generateItineraries(
+  {
+    airports,
+    cities: arrayToMap("city_id", cities),
+    countries: arrayToMap("country_id", countries),
+  },
+  priceLimit,
+  stopsProbability,
+  dateLimit,
+  quantity
+);
+
+console.log(JSON.stringify(itineraries))
