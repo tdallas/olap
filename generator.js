@@ -71,10 +71,10 @@ exports.generateItineraries = (
   for (const x of Array(quantity).keys()) {
     var stopsQuantity = 0;
     // omit for now
-    // if (Math.random() < stopsProbability) {
-    //   // random number between 1 and 2
-    //   stopsQuantity = Math.random() * 2 + 1;
-    // }
+    if (Math.random() < stopsProbability) {
+      // random number between 1 and 2
+      stopsQuantity = Math.random() * 2 + 1;
+    }
 
     const { originAirport, destinationAirport } = getRandomAirports(airports);
     const itinerary = {
@@ -89,13 +89,15 @@ exports.generateItineraries = (
     const originSegment = generateSegment(
       originAirport,
       destinationAirport,
-      fromDate
+      fromDate,
+      stopsQuantity
     );
 
     const destinationSegment = generateSegment(
       destinationAirport,
       originAirport,
-      originSegment.toDate
+      originSegment.toDate,
+      stopsQuantity
     );
     itineraries.push({ ...itinerary, originSegment, destinationSegment });
   }
@@ -135,7 +137,7 @@ const getRandomAirports = (airports) => {
   return { originAirport, destinationAirport };
 };
 
-const generateSegment = (fromAirport, toAirport, fromDate) => {
+const generateSegment = (fromAirport, toAirport, fromDate, stopsQuantity, [stopsAirports]) => {
   const flight_duration = Math.trunc(Math.random() * 64);
   const toDate = addHoursToDate(fromDate.date_id, flight_duration);
 
