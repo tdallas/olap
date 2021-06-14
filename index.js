@@ -1,4 +1,3 @@
-
 const airportsJson = require("./airports.json");
 const countries_to_consider = [
   "Argentina",
@@ -82,11 +81,12 @@ var legsId = 1;
 var stopsId = 1;
 for (var i = 0; i < itineraries.length; i++) {
   const baggage_id = Math.random() < 0.5 ? baggages[0] : baggages[1];
+  var currentSegmentId = segmentsId;
   segmentsSql.push({
-    itinerary_id: itineraries[i].itinerary_id,
-    segment_id: segmentsId++,
+    segment_id: currentSegmentId,
     flight_duration: itineraries[i].originSegment.flight_duration,
     baggage_id,
+    itinerary_id: itineraries[i].itinerary_id,
   });
   itineraries[i].originSegment.legs.forEach(
     ({
@@ -107,24 +107,26 @@ for (var i = 0; i < itineraries.length; i++) {
         });
       }
       legsSql.push({
+        leg_id: legsId++,
+        segment_id: currentSegmentId,
         arrival_airport_id,
         departure_airport_id,
+        technical_stop_id: stopsId - 1,
         departure_itinerary_date_id,
         arrival_itinerary_date_id,
-        leg_id: legsId++,
-        segment_id: segmentsId - 1,
-        technical_stop_id: stopsId - 1,
       });
       dates[fromDate.date_id] = fromDate;
       dates[toDate.date_id] = toDate;
     }
   );
 
+  currentSegmentId++;
+
   segmentsSql.push({
-    itinerary_id: itineraries[i].itinerary_id,
-    segment_id: segmentsId++,
+    segment_id: currentSegmentId,
     flight_duration: itineraries[i].destinationSegment.flight_duration,
     baggage_id,
+    itinerary_id: itineraries[i].itinerary_id,
   });
   itineraries[i].destinationSegment.legs.forEach(
     ({
@@ -136,37 +138,94 @@ for (var i = 0; i < itineraries.length; i++) {
       toDate,
     }) => {
       legsSql.push({
+        leg_id: legsId++,
+        segment_id: currentSegmentId,
         arrival_airport_id,
         departure_airport_id,
+        technical_stop_id: null,
         departure_itinerary_date_id,
         arrival_itinerary_date_id,
-        leg_id: legsId++,
-        segment_id: segmentsId - 1,
       });
       dates[fromDate.date_id] = fromDate;
       dates[toDate.date_id] = toDate;
     }
   );
+  currentSegmentId++;
 }
 
-console.log("itinerariesSql", itinerariesSql.length);
-console.log("segmentsSql", segmentsSql.length);
-console.log("legsSql", legsSql.length);
-console.log("dates", Object.values(dates).length);
-console.log("stops", stops.length);
+var client;
 
-// const { Client } = require('pg')
-// const client = new Client()
-// await client.connect()
+const generateQueries = () => {
+  // const executeQuery = (query, values, client) => client.query(query, values);
 
-// const text = 'INSERT INTO users(name, email) VALUES($1, $2) RETURNING *'
-// const values = ['brianc', 'brian.m.carlson@gmail.com']
+  var bigString = "";
 
-// // promise
-// client
-//   .query(text, values)
-//   .then(res => {
-//     console.log(res.rows[0])
-//     // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
-//   })
-//   .catch(e => console.error(e.stack))
+  // console.log("itineraries");
+  itinerariesSql.forEach((it) => {
+    bigString = bigString.concat(
+      `INSERT INTO itinerary (${it.itinerary_id}, ${it.domestic}, ${it.flight_type}, ${it.is_cancelable});`
+    );
+  });
+
+  // console.log("countries");
+  countries.forEach(({ country_id, country_name }) => {
+    bigString = bigString.concat(
+      `INSERT INTO country (${country_id}, ${country_name});`
+    );
+  });
+
+  // console.log("cities");
+  cities.forEach(({ city_id, city_name, country_id }) => {
+    bigString = bigString.concat(
+      `INSERT INTO cities (${city_id}, ${city_name}, ${country_id});`
+    );
+  });
+
+  airports.forEach(({ airport_id, city_id, airport_code, airport_name }) => {
+    bigString = bigString.concat(
+      `INSERT INTO airport VALUES(${airport_id}, ${city_id}, ${airport_code}, ${airport_name});`
+    );
+  });
+
+  stops.forEach((stop) => {
+    bigString = bigString.concat(
+      `INSERT INTO technicalstop VALUES(${stop.technical_stop_id}, ${stop.city_id}, ${stop.duration});`
+    );
+  });
+
+  Object.values(dates).forEach(
+    ({ itinerary_date_id, timezone, day, month, year, minute, hour }) => {
+      bigString = bigString.concat(
+        `INSERT INTO itinerarydate VALUES(${itinerary_date_id}, ${timezone}, ${day}, ${month}, ${year}, ${minute}, ${hour});`
+      );
+    }
+  );
+
+  segmentsSql.forEach(
+    ({ segment_id, flight_duration, baggage_id, itinerary_id }) => {
+      bigString = bigString.concat(
+        `INSERT INTO segment VALUES(${segment_id}, ${flight_duration}, ${baggage_id}, ${itinerary_id});`
+      );
+    }
+  );
+
+  legsSql.forEach(
+    ({
+      leg_id,
+      segment_id,
+      arrival_airport_id,
+      departure_airport_id,
+      technical_stop_id,
+      departure_itinerary_date_id,
+      arrival_itinerary_date_id,
+    }) => {
+      bigString = bigString.concat(
+        `INSERT INTO leg VALUES(${leg_id}, ${segment_id}, ${arrival_airport_id}, ${departure_airport_id}, ${technical_stop_id}, ${departure_itinerary_date_id}, ${arrival_itinerary_date_id});`
+      );
+    }
+  );
+
+  console.log(bigString);
+};
+
+generateQueries();

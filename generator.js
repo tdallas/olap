@@ -47,8 +47,8 @@ const generateAirports = (airports, citiesMap) =>
 const generateCities = (airports, countriesMap) =>
   airports.map((airport, currentIndex) => {
     return {
-      city_name: airport.city,
       city_id: currentIndex,
+      city_name: airport.city,
       country_id: countriesMap.get(airport.country).country_id,
     };
   });
@@ -69,7 +69,7 @@ exports.generateItineraries = (
 ) => {
   const itineraries = [];
   for (const x of Array(quantity).keys()) {
-    const itinerary_id = x;
+    const itinerary_id = x + 1;
     var stopsQuantity = 0;
     // omit for now
     if (Math.random() < stopsProbability) {
@@ -130,7 +130,15 @@ const generateDate = ({ lowYear, maxYear }, date) => {
   const minute = randomDate.getMinutes();
   const hour = randomDate.getHours();
 
-  return { year, month, day, minute, hour, date_id: randomDate.getTime() };
+  return {
+    itinerary_date_id: randomDate.getTime(),
+    timezone: "UTC",
+    day,
+    month,
+    year,
+    minute,
+    hour,
+  };
 };
 
 const addHoursToDate = (fromDate, hours) =>
@@ -191,7 +199,7 @@ const generateSegment = (
 
     for (var i = 0; i < stops_airports.length + 1; i++) {
       toDate = addHoursToDate(
-        fromDateLeg.date_id,
+        fromDateLeg.itinerary_date_id,
         flight_duration / stops_airports.length
       );
       if (i == 0) {
@@ -219,7 +227,7 @@ const generateSegment = (
       fromDateLeg = generateDate({}, toDate);
     }
   } else {
-    toDate = addHoursToDate(fromDate.date_id, flight_duration);
+    toDate = addHoursToDate(fromDate.itinerary_date_id, flight_duration);
     legs.push(
       generateLeg(fromAirport, toAirport, {
         fromDate,
@@ -242,7 +250,7 @@ const generateLeg = (fromAirport, toAirport, { fromDate, toDate }) => {
     departure_airport_id: fromAirport.airport_id,
     fromDate,
     toDate,
-    departure_itinerary_date_id: fromDate.date_id,
-    arrival_itinerary_date_id: toDate.date_id,
+    departure_itinerary_date_id: fromDate.itinerary_date_id,
+    arrival_itinerary_date_id: toDate.itinerary_date_id,
   };
 };
