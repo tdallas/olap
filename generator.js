@@ -81,7 +81,7 @@ exports.generateItineraries = (
       domestic:
         countries.get(cities.get(originAirport.city_id)) ===
         countries.get(cities.get(destinationAirport.city_id)),
-      flight_type: "DIRECT",
+      flight_type: stopsQuantity == 0 ? "DIRECT" : "NON_DIRECT",
       is_cancelable: Math.random() < 0.35,
     };
 
@@ -186,7 +186,6 @@ const generateSegment = (
         flight_duration / stops_airports.length
       );
       if (i == 0) {
-        // console.log("caso i == 0", fromAirport, stops_airports[0]);
         legs.push(
           generateLeg(fromAirport, stops_airports[0], {
             fromDate,
@@ -194,12 +193,6 @@ const generateSegment = (
           })
         );
       } else if (i == stops_airports.length - 1) {
-        // console.log(
-        //   "caso i ante ultimo",
-        //   stops_airports[i - 1],
-        //   stops_airports[i]
-        // );
-
         legs.push(
           generateLeg(stops_airports[i - 1], stops_airports[i], {
             fromDate,
@@ -207,8 +200,6 @@ const generateSegment = (
           })
         );
       } else if (i == stops_airports.length) {
-        console.log("caso i ultimo", stops_airports[i - 1], toAirport);
-        //
         legs.push(
           generateLeg(stops_airports[i - 1], toAirport, {
             fromDate,
@@ -228,7 +219,7 @@ const generateSegment = (
     );
   }
 
-  const baggage = generateBaggage(true);
+  const baggage = generateBaggage(Math.random() > 0.65);
 
   return {
     legs,
