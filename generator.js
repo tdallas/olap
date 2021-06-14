@@ -69,11 +69,12 @@ exports.generateItineraries = (
 ) => {
   const itineraries = [];
   for (const x of Array(quantity).keys()) {
+    const itinerary_id = x;
     var stopsQuantity = 0;
     // omit for now
     if (Math.random() < stopsProbability) {
       // random number between 1 and 2
-      stopsQuantity = Math.trunc(Math.random() * 2 + 1);
+      stopsQuantity = Math.trunc(Math.random() * 3);
     }
 
     const { originAirport, destinationAirport } = getRandomAirports(airports);
@@ -91,7 +92,8 @@ exports.generateItineraries = (
       destinationAirport,
       fromDate,
       stopsQuantity,
-      airports
+      airports,
+      itinerary_id
     );
 
     const destinationSegment = generateSegment(
@@ -99,11 +101,17 @@ exports.generateItineraries = (
       originAirport,
       originSegment.toDate,
       0,
-      airports
+      airports,
+      itinerary_id
     );
     delete originSegment.toDate;
     delete destinationSegment.toDate;
-    itineraries.push({ ...itinerary, originSegment, destinationSegment });
+    itineraries.push({
+      ...itinerary,
+      originSegment,
+      destinationSegment,
+      itinerary_id,
+    });
   }
   return itineraries;
 };
@@ -164,7 +172,8 @@ const generateSegment = (
   toAirport,
   fromDate,
   stopsQuantity,
-  airports
+  airports,
+  itinerary_id
 ) => {
   const flight_duration = Math.trunc(Math.random() * 64);
 
@@ -219,18 +228,12 @@ const generateSegment = (
     );
   }
 
-  const baggage = generateBaggage(Math.random() > 0.65);
-
   return {
+    itinerary_id,
     legs,
-    baggage,
     flight_duration,
     toDate: generateDate({}, toDate),
   };
-};
-
-const generateBaggage = (included) => {
-  return { weight: 23, weight_unit: "KG", included };
 };
 
 const generateLeg = (fromAirport, toAirport, { fromDate, toDate }) => {
