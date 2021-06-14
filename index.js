@@ -49,8 +49,6 @@ const itineraries = generateItineraries(
   quantity
 );
 
-const airportsMap = arrayToMap("airport_id", airports);
-
 const baggages = [
   { baggage_id: 1, quantity: 1, weight: 23, weight_unit: "KG", included: true },
   {
@@ -80,7 +78,8 @@ var segmentsId = 1;
 var legsId = 1;
 var stopsId = 1;
 for (var i = 0; i < itineraries.length; i++) {
-  const baggage_id = Math.random() < 0.5 ? baggages[0] : baggages[1];
+  const baggage_id =
+    Math.random() < 0.5 ? baggages[0].baggage_id : baggages[1].baggage_id;
   var currentSegmentId = segmentsId;
   segmentsSql.push({
     segment_id: currentSegmentId,
@@ -99,24 +98,35 @@ for (var i = 0; i < itineraries.length; i++) {
     }) => {
       if (itineraries[i].originSegment.legs.length > 1) {
         stops.push({
-          technical_stop_id: stopsId++,
-          city_id: airportsMap[arrival_airport_id],
+          technical_stop_id: stopsId,
+          city_id: airports[arrival_airport_id].city_id,
           duration:
             itineraries[i].originSegment.flight_duration /
             itineraries[i].originSegment.stopsQuantity,
         });
+        legsSql.push({
+          leg_id: legsId++,
+          segment_id: currentSegmentId,
+          arrival_airport_id,
+          departure_airport_id,
+          technical_stop_id: stopsId,
+          departure_itinerary_date_id,
+          arrival_itinerary_date_id,
+        });
+        stopsId++;
+      } else {
+        legsSql.push({
+          leg_id: legsId++,
+          segment_id: currentSegmentId,
+          arrival_airport_id,
+          departure_airport_id,
+          technical_stop_id: null,
+          departure_itinerary_date_id,
+          arrival_itinerary_date_id,
+        });
       }
-      legsSql.push({
-        leg_id: legsId++,
-        segment_id: currentSegmentId,
-        arrival_airport_id,
-        departure_airport_id,
-        technical_stop_id: stopsId - 1,
-        departure_itinerary_date_id,
-        arrival_itinerary_date_id,
-      });
-      dates[fromDate.date_id] = fromDate;
-      dates[toDate.date_id] = toDate;
+      dates[fromDate.itinerary_date_id] = fromDate;
+      dates[toDate.itinerary_date_id] = toDate;
     }
   );
 
@@ -146,57 +156,63 @@ for (var i = 0; i < itineraries.length; i++) {
         departure_itinerary_date_id,
         arrival_itinerary_date_id,
       });
-      dates[fromDate.date_id] = fromDate;
-      dates[toDate.date_id] = toDate;
+      dates[fromDate.itinerary_date_id] = fromDate;
+      dates[toDate.itinerary_date_id] = toDate;
     }
   );
   currentSegmentId++;
+  segmentsId = currentSegmentId;
 }
-
-var client;
 
 const generateQueries = () => {
   // const executeQuery = (query, values, client) => client.query(query, values);
 
   var bigString = "";
 
+  baggages.forEach(
+    ({ baggage_id, quantity, weight, weight_unit, included }) => {
+      bigString = bigString.concat(
+        `INSERT INTO baggage VALUES(${baggage_id}, ${quantity}, ${weight}, "${weight_unit}", ${included});\n`
+      );
+    }
+  );
   // console.log("itineraries");
   itinerariesSql.forEach((it) => {
     bigString = bigString.concat(
-      `INSERT INTO itinerary (${it.itinerary_id}, ${it.domestic}, ${it.flight_type}, ${it.is_cancelable});`
+      `INSERT INTO itinerary VALUES(${it.itinerary_id}, ${it.domestic}, "${it.flight_type}", ${it.is_cancelable});\n`
     );
   });
 
   // console.log("countries");
   countries.forEach(({ country_id, country_name }) => {
     bigString = bigString.concat(
-      `INSERT INTO country (${country_id}, ${country_name});`
+      `INSERT INTO country VALUES(${country_id}, "${country_name}");\n`
     );
   });
 
   // console.log("cities");
   cities.forEach(({ city_id, city_name, country_id }) => {
     bigString = bigString.concat(
-      `INSERT INTO cities (${city_id}, ${city_name}, ${country_id});`
+      `INSERT INTO city VALUES(${city_id}, "${city_name}", ${country_id});\n`
     );
   });
 
   airports.forEach(({ airport_id, city_id, airport_code, airport_name }) => {
     bigString = bigString.concat(
-      `INSERT INTO airport VALUES(${airport_id}, ${city_id}, ${airport_code}, ${airport_name});`
+      `INSERT INTO airport VALUES(${airport_id}, ${city_id}, "${airport_code}", "${airport_name}");\n`
     );
   });
 
   stops.forEach((stop) => {
     bigString = bigString.concat(
-      `INSERT INTO technicalstop VALUES(${stop.technical_stop_id}, ${stop.city_id}, ${stop.duration});`
+      `INSERT INTO technicalstop VALUES(${stop.technical_stop_id}, ${stop.city_id}, ${stop.duration});\n`
     );
   });
 
   Object.values(dates).forEach(
     ({ itinerary_date_id, timezone, day, month, year, minute, hour }) => {
       bigString = bigString.concat(
-        `INSERT INTO itinerarydate VALUES(${itinerary_date_id}, ${timezone}, ${day}, ${month}, ${year}, ${minute}, ${hour});`
+        `INSERT INTO itinerarydate VALUES(${itinerary_date_id}, "${timezone}", ${day}, ${month}, ${year}, ${minute}, ${hour});\n`
       );
     }
   );
@@ -204,7 +220,7 @@ const generateQueries = () => {
   segmentsSql.forEach(
     ({ segment_id, flight_duration, baggage_id, itinerary_id }) => {
       bigString = bigString.concat(
-        `INSERT INTO segment VALUES(${segment_id}, ${flight_duration}, ${baggage_id}, ${itinerary_id});`
+        `INSERT INTO segment VALUES(${segment_id}, ${flight_duration}, ${baggage_id}, ${itinerary_id});\n`
       );
     }
   );
@@ -220,12 +236,18 @@ const generateQueries = () => {
       arrival_itinerary_date_id,
     }) => {
       bigString = bigString.concat(
-        `INSERT INTO leg VALUES(${leg_id}, ${segment_id}, ${arrival_airport_id}, ${departure_airport_id}, ${technical_stop_id}, ${departure_itinerary_date_id}, ${arrival_itinerary_date_id});`
+        `INSERT INTO leg VALUES(${leg_id}, ${segment_id}, ${arrival_airport_id}, ${departure_airport_id}, ${technical_stop_id}, ${departure_itinerary_date_id}, ${arrival_itinerary_date_id});\n`
       );
     }
   );
 
-  console.log(bigString);
+  return bigString;
 };
 
-generateQueries();
+const query = generateQueries();
+
+fs = require("fs");
+fs.writeFile("query.sql", query, function (err) {
+  if (err) return console.log(err);
+  console.log("listo");
+});

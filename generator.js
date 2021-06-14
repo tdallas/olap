@@ -38,7 +38,7 @@ exports.arrayToMap = (key, array) =>
 
 const generateAirports = (airports, citiesMap) =>
   airports.map((airport, currentIndex) => ({
-    airport_id: currentIndex,
+    airport_id: currentIndex + 1,
     city_id: citiesMap.get(airport.city).city_id,
     airport_code: airport.code,
     airport_name: airport.name,
@@ -47,7 +47,7 @@ const generateAirports = (airports, citiesMap) =>
 const generateCities = (airports, countriesMap) =>
   airports.map((airport, currentIndex) => {
     return {
-      city_id: currentIndex,
+      city_id: currentIndex + 1,
       city_name: airport.city,
       country_id: countriesMap.get(airport.country).country_id,
     };
@@ -55,7 +55,7 @@ const generateCities = (airports, countriesMap) =>
 
 const generateCountries = (airports) =>
   airports.map((airport, currentIndex) => ({
-    country_id: currentIndex,
+    country_id: currentIndex + 1,
     country_name: airport.country,
   }));
 
@@ -241,6 +241,7 @@ const generateSegment = (
     legs,
     flight_duration,
     toDate: generateDate({}, toDate),
+    stopsQuantity,
   };
 };
 
