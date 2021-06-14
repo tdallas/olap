@@ -73,7 +73,7 @@ exports.generateItineraries = (
     // omit for now
     if (Math.random() < stopsProbability) {
       // random number between 1 and 2
-      stopsQuantity = Math.random() * 2 + 1;
+      stopsQuantity = Math.trunc(Math.random() * 2 + 1);
     }
 
     const { originAirport, destinationAirport } = getRandomAirports(airports);
@@ -90,15 +90,19 @@ exports.generateItineraries = (
       originAirport,
       destinationAirport,
       fromDate,
-      stopsQuantity
+      stopsQuantity,
+      airports
     );
 
     const destinationSegment = generateSegment(
       destinationAirport,
       originAirport,
       originSegment.toDate,
-      stopsQuantity
+      stopsQuantity,
+      airports
     );
+    delete originSegment.toDate;
+    delete destinationSegment.toDate;
     itineraries.push({ ...itinerary, originSegment, destinationSegment });
   }
   return itineraries;
@@ -137,18 +141,99 @@ const getRandomAirports = (airports) => {
   return { originAirport, destinationAirport };
 };
 
-const generateSegment = (fromAirport, toAirport, fromDate, stopsQuantity, [stopsAirports]) => {
-  const flight_duration = Math.trunc(Math.random() * 64);
-  const toDate = addHoursToDate(fromDate.date_id, flight_duration);
+const getRandomAirportsFromStopsQty = (stopsQuantity, toAirport, airports) => {
+  const stops_airports = [];
+  for (const x of Array(stopsQuantity).keys()) {
+    var index = Math.trunc(Math.random() * (airports.length - 1));
+    var airport = airports[index];
+    if (airport.airport_id == toAirport.airport_id) {
+      index = Math.trunc(Math.random() * (airports.length - 1));
+      airport = airports[index];
+    }
+    if (airports.includes(airport)) {
+      index = Math.trunc(Math.random() * (airports.length - 1));
+      airport = airports[index];
+    }
+    stops_airports.push(airport);
+  }
+  return stops_airports;
+};
 
-  const firstLeg = generateLeg(fromAirport, toAirport, {
-    fromDate,
-    toDate: generateDate({}, toDate),
-  });
+const generateSegment = (
+  fromAirport,
+  toAirport,
+  fromDate,
+  stopsQuantity,
+  airports
+) => {
+  const flight_duration = Math.trunc(Math.random() * 64);
+
+  const legs = [];
+
+  if (stopsQuantity > 0) {
+    const stops_airports = getRandomAirportsFromStopsQty(
+      stopsQuantity,
+      toAirport,
+      airports
+    );
+
+    var fromDateLeg = fromDate;
+    var toDate;
+
+    for (var i = 0; i < stops_airports.length + 1; i++) {
+      toDate = addHoursToDate(
+        fromDateLeg.date_id,
+        flight_duration / stops_airports.length
+      );
+      if (i == 0) {
+        // console.log("caso i == 0", fromAirport, stops_airports[0]);
+        legs.push(
+          generateLeg(fromAirport, stops_airports[0], {
+            fromDate,
+            toDate: generateDate({}, toDate),
+          })
+        );
+      } else if (i == stops_airports.length - 1) {
+        // console.log(
+        //   "caso i ante ultimo",
+        //   stops_airports[i - 1],
+        //   stops_airports[i]
+        // );
+
+        legs.push(
+          generateLeg(stops_airports[i - 1], stops_airports[i], {
+            fromDate,
+            toDate: generateDate({}, toDate),
+          })
+        );
+      } else if (i == stops_airports.length) {
+        console.log("caso i ultimo", stops_airports[i - 1], toAirport);
+// 
+        legs.push(
+          generateLeg(stops_airports[i - 1], toAirport, {
+            fromDate,
+            toDate: generateDate({}, toDate),
+          })
+        );
+      }
+      fromDateLeg = generateDate({}, toDate);
+    }
+  } else {
+    toDate = addHoursToDate(fromDate.date_id, flight_duration);
+    legs.push(
+      generateLeg(fromAirport, toAirport, {
+        fromDate,
+        toDate: generateDate({}, toDate),
+      })
+    );
+  }
+
   const baggage = generateBaggage(true);
 
+  // console.log(stopsQuantity, legs);
+
   return {
-    legs: [firstLeg],
+    legs,
     baggage,
     flight_duration,
     toDate: generateDate({}, toDate),

@@ -51,7 +51,7 @@ const dateLimit = {
 const stopsProbability = 0.3;
 
 // 10 million itineraries
-const quantity = 10000;
+const quantity = 5;
 
 const itineraries = generateItineraries(
   {
@@ -64,3 +64,5 @@ const itineraries = generateItineraries(
   dateLimit,
   quantity
 );
+
+console.log(JSON.stringify(itineraries));
