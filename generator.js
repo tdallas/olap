@@ -239,7 +239,7 @@ const generateLeg = (fromAirport, toAirport, { fromDate, toDate }) => {
     departure_airport_id: fromAirport.airport_id,
     fromDate,
     toDate,
-    // departure_itinerary_date_id: fromDate.date_id,
-    // arrival_itinerary_date_id: toDate.date_id,
+    departure_itinerary_date_id: fromDate.date_id,
+    arrival_itinerary_date_id: toDate.date_id,
   };
 };
