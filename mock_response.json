@@ -2,115 +2,98 @@
   {
     "domestic": true,
     "flight_type": "DIRECT",
-    "is_cancelable": true,
+    "is_cancelable": false,
     "originSegment": {
       "legs": [
         {
-          "arrival_airport_id": 94,
-          "departure_airport_id": 78,
+          "arrival_airport_id": 892,
+          "departure_airport_id": 399,
           "fromDate": {
-            "year": 2020,
-            "month": 7,
-            "day": 4,
-            "minute": 7,
-            "hour": 1,
-            "date_id": 1596082048715
-          },
-          "toDate": {
-            "year": 2020,
-            "month": 7,
-            "day": 5,
-            "minute": 7,
-            "hour": 11,
-            "date_id": 1596204448715
-          }
-        }
-      ],
-      "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
-      "flight_duration": 34
-    },
-    "destinationSegment": {
-      "legs": [
-        {
-          "arrival_airport_id": 78,
-          "departure_airport_id": 94,
-          "fromDate": {
-            "year": 2020,
-            "month": 7,
-            "day": 5,
-            "minute": 7,
-            "hour": 11,
-            "date_id": 1596204448715
-          },
-          "toDate": {
-            "year": 2020,
-            "month": 8,
+            "year": 2021,
+            "month": 4,
             "day": 0,
-            "minute": 7,
-            "hour": 13,
-            "date_id": 1596384448715
-          }
-        }
-      ],
-      "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
-      "flight_duration": 50
-    }
-  },
-  {
-    "domestic": true,
-    "flight_type": "DIRECT",
-    "is_cancelable": true,
-    "originSegment": {
-      "legs": [
-        {
-          "arrival_airport_id": 202,
-          "departure_airport_id": 1012,
-          "fromDate": {
-            "year": 2021,
-            "month": 2,
-            "day": 3,
-            "minute": 55,
-            "hour": 0,
-            "date_id": 1613534100232
+            "minute": 30,
+            "hour": 20,
+            "date_id": 1618183839042
           },
           "toDate": {
             "year": 2021,
-            "month": 2,
-            "day": 5,
-            "minute": 55,
-            "hour": 2,
-            "date_id": 1613714100232
+            "month": 4,
+            "day": 1,
+            "minute": 0,
+            "hour": 15,
+            "date_id": 1618250439042
+          }
+        },
+        {
+          "arrival_airport_id": 864,
+          "departure_airport_id": 892,
+          "fromDate": {
+            "year": 2021,
+            "month": 4,
+            "day": 0,
+            "minute": 30,
+            "hour": 20,
+            "date_id": 1618183839042
+          },
+          "toDate": {
+            "year": 2021,
+            "month": 4,
+            "day": 2,
+            "minute": 30,
+            "hour": 9,
+            "date_id": 1618317039042
+          }
+        },
+        {
+          "arrival_airport_id": 426,
+          "departure_airport_id": 864,
+          "fromDate": {
+            "year": 2021,
+            "month": 4,
+            "day": 0,
+            "minute": 30,
+            "hour": 20,
+            "date_id": 1618183839042
+          },
+          "toDate": {
+            "year": 2021,
+            "month": 4,
+            "day": 3,
+            "minute": 0,
+            "hour": 4,
+            "date_id": 1618383639042
           }
         }
       ],
       "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
-      "flight_duration": 50
+      "flight_duration": 37
     },
     "destinationSegment": {
       "legs": [
         {
-          "arrival_airport_id": 1012,
-          "departure_airport_id": 202,
+          "arrival_airport_id": 399,
+          "departure_airport_id": 426,
           "fromDate": {
             "year": 2021,
-            "month": 2,
-            "day": 5,
-            "minute": 55,
-            "hour": 2,
-            "date_id": 1613714100232
+            "month": 4,
+            "day": 3,
+            "minute": 0,
+            "hour": 4,
+            "date_id": 1618383639042
           },
           "toDate": {
             "year": 2021,
-            "month": 2,
-            "day": 6,
-            "minute": 55,
-            "hour": 1,
-            "date_id": 1613796900232
+            "month": 4,
+            "day": 5,
+            "minute": 0,
+            "hour": 19,
+            "date_id": 1618610439042
           }
         }
       ],
       "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
-      "flight_duration": 23
+      "flight_duration": 63
     }
   },
   {
@@ -120,177 +103,120 @@
     "originSegment": {
       "legs": [
         {
-          "arrival_airport_id": 834,
-          "departure_airport_id": 854,
+          "arrival_airport_id": 684,
+          "departure_airport_id": 34,
           "fromDate": {
-            "year": 2020,
-            "month": 11,
-            "day": 2,
-            "minute": 27,
-            "hour": 3,
-            "date_id": 1605594423133
-          },
-          "toDate": {
-            "year": 2020,
-            "month": 11,
-            "day": 3,
-            "minute": 27,
-            "hour": 12,
-            "date_id": 1605713223133
-          }
-        },
-        {
-          "arrival_airport_id": 786,
-          "departure_airport_id": 834,
-          "fromDate": {
-            "year": 2020,
-            "month": 11,
-            "day": 2,
-            "minute": 27,
-            "hour": 3,
-            "date_id": 1605594423133
-          },
-          "toDate": {
-            "year": 2020,
-            "month": 11,
-            "day": 4,
-            "minute": 27,
-            "hour": 21,
-            "date_id": 1605832023133
-          }
-        }
-      ],
-      "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
-      "flight_duration": 33
-    },
-    "destinationSegment": {
-      "legs": [
-        {
-          "arrival_airport_id": 191,
-          "departure_airport_id": 786,
-          "fromDate": {
-            "year": 2020,
-            "month": 11,
-            "day": 4,
-            "minute": 27,
-            "hour": 21,
-            "date_id": 1605832023133
-          },
-          "toDate": {
-            "year": 2020,
-            "month": 11,
-            "day": 6,
-            "minute": 27,
-            "hour": 14,
-            "date_id": 1605979623133
-          }
-        },
-        {
-          "arrival_airport_id": 854,
-          "departure_airport_id": 191,
-          "fromDate": {
-            "year": 2020,
-            "month": 11,
-            "day": 4,
-            "minute": 27,
-            "hour": 21,
-            "date_id": 1605832023133
-          },
-          "toDate": {
-            "year": 2020,
-            "month": 11,
+            "year": 2021,
+            "month": 7,
             "day": 1,
-            "minute": 27,
-            "hour": 7,
-            "date_id": 1606127223133
-          }
-        }
-      ],
-      "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
-      "flight_duration": 41
-    }
-  },
-  {
-    "domestic": true,
-    "flight_type": "DIRECT",
-    "is_cancelable": true,
-    "originSegment": {
-      "legs": [
-        {
-          "arrival_airport_id": 83,
-          "departure_airport_id": 480,
-          "fromDate": {
-            "year": 2021,
-            "month": 3,
-            "day": 3,
-            "minute": 51,
-            "hour": 3,
-            "date_id": 1615963919296
+            "minute": 10,
+            "hour": 5,
+            "date_id": 1626077415078
           },
           "toDate": {
             "year": 2021,
-            "month": 3,
-            "day": 5,
-            "minute": 51,
-            "hour": 7,
-            "date_id": 1616151119296
+            "month": 7,
+            "day": 1,
+            "minute": 10,
+            "hour": 6,
+            "date_id": 1626081015078
           }
         }
       ],
       "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
-      "flight_duration": 52
+      "flight_duration": 1
     },
     "destinationSegment": {
       "legs": [
         {
-          "arrival_airport_id": 480,
-          "departure_airport_id": 83,
+          "arrival_airport_id": 34,
+          "departure_airport_id": 684,
           "fromDate": {
             "year": 2021,
-            "month": 3,
-            "day": 5,
-            "minute": 51,
-            "hour": 7,
-            "date_id": 1616151119296
+            "month": 7,
+            "day": 1,
+            "minute": 10,
+            "hour": 6,
+            "date_id": 1626081015078
           },
           "toDate": {
             "year": 2021,
-            "month": 3,
-            "day": 6,
-            "minute": 51,
-            "hour": 1,
-            "date_id": 1616215919296
+            "month": 7,
+            "day": 1,
+            "minute": 10,
+            "hour": 9,
+            "date_id": 1626091815078
           }
         }
       ],
       "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
-      "flight_duration": 18
+      "flight_duration": 3
     }
   },
   {
     "domestic": true,
     "flight_type": "DIRECT",
-    "is_cancelable": true,
+    "is_cancelable": false,
     "originSegment": {
       "legs": [
         {
-          "arrival_airport_id": 52,
-          "departure_airport_id": 218,
+          "arrival_airport_id": 178,
+          "departure_airport_id": 149,
           "fromDate": {
-            "year": 2021,
-            "month": 7,
-            "day": 0,
-            "minute": 32,
-            "hour": 13,
-            "date_id": 1627230755761
+            "year": 2020,
+            "month": 10,
+            "day": 1,
+            "minute": 8,
+            "hour": 5,
+            "date_id": 1603699735803
           },
           "toDate": {
-            "year": 2021,
-            "month": 7,
+            "year": 2020,
+            "month": 10,
+            "day": 2,
+            "minute": 8,
+            "hour": 12,
+            "date_id": 1603811335803
+          }
+        },
+        {
+          "arrival_airport_id": 203,
+          "departure_airport_id": 178,
+          "fromDate": {
+            "year": 2020,
+            "month": 10,
+            "day": 1,
+            "minute": 8,
+            "hour": 5,
+            "date_id": 1603699735803
+          },
+          "toDate": {
+            "year": 2020,
+            "month": 10,
             "day": 3,
-            "minute": 32,
-            "hour": 3,
-            "date_id": 1627453955761
+            "minute": 8,
+            "hour": 19,
+            "date_id": 1603922935803
+          }
+        },
+        {
+          "arrival_airport_id": 59,
+          "departure_airport_id": 203,
+          "fromDate": {
+            "year": 2020,
+            "month": 10,
+            "day": 1,
+            "minute": 8,
+            "hour": 5,
+            "date_id": 1603699735803
+          },
+          "toDate": {
+            "year": 2020,
+            "month": 10,
+            "day": 5,
+            "minute": 8,
+            "hour": 2,
+            "date_id": 1604034535803
           }
         }
       ],
@@ -300,28 +226,142 @@
     "destinationSegment": {
       "legs": [
         {
-          "arrival_airport_id": 218,
-          "departure_airport_id": 52,
+          "arrival_airport_id": 149,
+          "departure_airport_id": 59,
           "fromDate": {
-            "year": 2021,
-            "month": 7,
-            "day": 3,
-            "minute": 32,
-            "hour": 3,
-            "date_id": 1627453955761
+            "year": 2020,
+            "month": 10,
+            "day": 5,
+            "minute": 8,
+            "hour": 2,
+            "date_id": 1604034535803
           },
           "toDate": {
-            "year": 2021,
-            "month": 7,
-            "day": 4,
-            "minute": 32,
-            "hour": 2,
-            "date_id": 1627536755761
+            "year": 2020,
+            "month": 10,
+            "day": 6,
+            "minute": 8,
+            "hour": 0,
+            "date_id": 1604113735803
           }
         }
       ],
       "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
-      "flight_duration": 23
+      "flight_duration": 22
+    }
+  },
+  {
+    "domestic": true,
+    "flight_type": "DIRECT",
+    "is_cancelable": true,
+    "originSegment": {
+      "legs": [
+        {
+          "arrival_airport_id": 169,
+          "departure_airport_id": 579,
+          "fromDate": {
+            "year": 2021,
+            "month": 12,
+            "day": 6,
+            "minute": 31,
+            "hour": 12,
+            "date_id": 1638631895335
+          },
+          "toDate": {
+            "year": 2021,
+            "month": 12,
+            "day": 6,
+            "minute": 31,
+            "hour": 20,
+            "date_id": 1638660695335
+          }
+        }
+      ],
+      "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
+      "flight_duration": 8
+    },
+    "destinationSegment": {
+      "legs": [
+        {
+          "arrival_airport_id": 579,
+          "departure_airport_id": 169,
+          "fromDate": {
+            "year": 2021,
+            "month": 12,
+            "day": 6,
+            "minute": 31,
+            "hour": 20,
+            "date_id": 1638660695335
+          },
+          "toDate": {
+            "year": 2021,
+            "month": 12,
+            "day": 1,
+            "minute": 31,
+            "hour": 18,
+            "date_id": 1638826295335
+          }
+        }
+      ],
+      "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
+      "flight_duration": 46
+    }
+  },
+  {
+    "domestic": true,
+    "flight_type": "DIRECT",
+    "is_cancelable": true,
+    "originSegment": {
+      "legs": [
+        {
+          "arrival_airport_id": 205,
+          "departure_airport_id": 247,
+          "fromDate": {
+            "year": 2020,
+            "month": 3,
+            "day": 0,
+            "minute": 31,
+            "hour": 14,
+            "date_id": 1584898316867
+          },
+          "toDate": {
+            "year": 2020,
+            "month": 3,
+            "day": 1,
+            "minute": 31,
+            "hour": 2,
+            "date_id": 1584941516867
+          }
+        }
+      ],
+      "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
+      "flight_duration": 12
+    },
+    "destinationSegment": {
+      "legs": [
+        {
+          "arrival_airport_id": 247,
+          "departure_airport_id": 205,
+          "fromDate": {
+            "year": 2020,
+            "month": 3,
+            "day": 1,
+            "minute": 31,
+            "hour": 2,
+            "date_id": 1584941516867
+          },
+          "toDate": {
+            "year": 2020,
+            "month": 3,
+            "day": 2,
+            "minute": 31,
+            "hour": 20,
+            "date_id": 1585092716867
+          }
+        }
+      ],
+      "baggage": { "weight": 23, "weight_unit": "KG", "included": true },
+      "flight_duration": 42
     }
   }
 ]
