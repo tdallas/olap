@@ -98,7 +98,7 @@ exports.generateItineraries = (
       destinationAirport,
       originAirport,
       originSegment.toDate,
-      stopsQuantity,
+      0,
       airports
     );
     delete originSegment.toDate;
@@ -229,8 +229,6 @@ const generateSegment = (
   }
 
   const baggage = generateBaggage(true);
-
-  // console.log(stopsQuantity, legs);
 
   return {
     legs,
