@@ -208,7 +208,7 @@ const generateSegment = (
         );
       } else if (i == stops_airports.length) {
         console.log("caso i ultimo", stops_airports[i - 1], toAirport);
-// 
+        //
         legs.push(
           generateLeg(stops_airports[i - 1], toAirport, {
             fromDate,
@@ -246,8 +246,8 @@ const generateBaggage = (included) => {
 
 const generateLeg = (fromAirport, toAirport, { fromDate, toDate }) => {
   return {
-    arrival_airport_id: fromAirport.airport_id,
-    departure_airport_id: toAirport.airport_id,
+    arrival_airport_id: toAirport.airport_id,
+    departure_airport_id: fromAirport.airport_id,
     fromDate,
     toDate,
     // departure_itinerary_date_id: fromDate.date_id,
