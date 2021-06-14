@@ -35,7 +35,7 @@ const dateLimit = {
 const stopsProbability = 0.3;
 
 // 10 million itineraries
-const quantity = 10;
+const quantity = 700000;
 
 const itineraries = generateItineraries(
   {
@@ -169,57 +169,74 @@ const generateQueries = () => {
 
   var bigString = "";
 
+  const fs = require("fs");
+  var logger = fs.createWriteStream("query.sql");
+
   baggages.forEach(
     ({ baggage_id, quantity, weight, weight_unit, included }) => {
-      bigString = bigString.concat(
-        `INSERT INTO baggage VALUES(${baggage_id}, ${quantity}, ${weight}, "${weight_unit}", ${included});\n`
+      logger.write(
+        `INSERT INTO baggage VALUES(${baggage_id}, ${quantity}, ${weight}, '${weight_unit}', ${included});\n`
       );
     }
   );
-  // console.log("itineraries");
+  console.log("itineraries");
   itinerariesSql.forEach((it) => {
-    bigString = bigString.concat(
-      `INSERT INTO itinerary VALUES(${it.itinerary_id}, ${it.domestic}, "${it.flight_type}", ${it.is_cancelable});\n`
+    logger.write(
+      `INSERT INTO itinerary VALUES(${it.itinerary_id}, ${it.domestic}, '${it.flight_type}', ${it.is_cancelable});\n`
     );
   });
 
-  // console.log("countries");
+  console.log("countries");
   countries.forEach(({ country_id, country_name }) => {
-    bigString = bigString.concat(
-      `INSERT INTO country VALUES(${country_id}, "${country_name}");\n`
+    logger.write(
+      `INSERT INTO country VALUES(${country_id}, '${country_name.replace(
+        "'",
+        ""
+      )}');\n`
     );
   });
 
-  // console.log("cities");
+  console.log("cities");
   cities.forEach(({ city_id, city_name, country_id }) => {
-    bigString = bigString.concat(
-      `INSERT INTO city VALUES(${city_id}, "${city_name}", ${country_id});\n`
+    logger.write(
+      `INSERT INTO city VALUES(${city_id}, '${city_name.replace(
+        "'",
+        ""
+      )}', ${country_id});\n`
     );
   });
-
+  console.log("airports");
   airports.forEach(({ airport_id, city_id, airport_code, airport_name }) => {
-    bigString = bigString.concat(
-      `INSERT INTO airport VALUES(${airport_id}, ${city_id}, "${airport_code}", "${airport_name}");\n`
+    logger.write(
+      `INSERT INTO airport VALUES(${airport_id}, ${city_id}, '${airport_code}', '${airport_name.replace(
+        "'",
+        ""
+      )}');\n`
     );
   });
 
+  console.log("stops");
   stops.forEach((stop) => {
-    bigString = bigString.concat(
+    logger.write(
       `INSERT INTO technicalstop VALUES(${stop.technical_stop_id}, ${stop.city_id}, ${stop.duration});\n`
     );
   });
 
   Object.values(dates).forEach(
     ({ itinerary_date_id, timezone, day, month, year, minute, hour }) => {
-      bigString = bigString.concat(
-        `INSERT INTO itinerarydate VALUES(${itinerary_date_id}, "${timezone}", ${day}, ${month}, ${year}, ${minute}, ${hour});\n`
+      const string = "".concat(
+        `INSERT INTO itinerarydate VALUES(${itinerary_date_id}, '${timezone}', ${day}, ${month}, ${year}, ${minute}, ${hour});\n`
       );
+      logger.write(string);
     }
   );
 
   segmentsSql.forEach(
     ({ segment_id, flight_duration, baggage_id, itinerary_id }) => {
-      bigString = bigString.concat(
+      // newString = newString.concat(
+      //   `INSERT INTO segment VALUES(${segment_id}, ${flight_duration}, ${baggage_id}, ${itinerary_id});\n`
+      // );
+      logger.write(
         `INSERT INTO segment VALUES(${segment_id}, ${flight_duration}, ${baggage_id}, ${itinerary_id});\n`
       );
     }
@@ -235,19 +252,16 @@ const generateQueries = () => {
       departure_itinerary_date_id,
       arrival_itinerary_date_id,
     }) => {
-      bigString = bigString.concat(
+      // newString = newString.concat(
+      //   `INSERT INTO leg VALUES(${leg_id}, ${segment_id}, ${arrival_airport_id}, ${departure_airport_id}, ${technical_stop_id}, ${departure_itinerary_date_id}, ${arrival_itinerary_date_id});\n`
+      // );
+      logger.write(
         `INSERT INTO leg VALUES(${leg_id}, ${segment_id}, ${arrival_airport_id}, ${departure_airport_id}, ${technical_stop_id}, ${departure_itinerary_date_id}, ${arrival_itinerary_date_id});\n`
       );
     }
   );
-
-  return bigString;
+  logger.end();
+  return;
 };
 
 const query = generateQueries();
-
-fs = require("fs");
-fs.writeFile("query.sql", query, function (err) {
-  if (err) return console.log(err);
-  console.log("listo");
-});
