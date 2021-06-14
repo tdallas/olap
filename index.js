@@ -1,18 +1,3 @@
-// const { Client } = require('pg')
-// const client = new Client()
-// await client.connect()
-
-// const text = 'INSERT INTO users(name, email) VALUES($1, $2) RETURNING *'
-// const values = ['brianc', 'brian.m.carlson@gmail.com']
-
-// // promise
-// client
-//   .query(text, values)
-//   .then(res => {
-//     console.log(res.rows[0])
-//     // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
-//   })
-//   .catch(e => console.error(e.stack))
 
 const airportsJson = require("./airports.json");
 const countries_to_consider = [
@@ -163,8 +148,25 @@ for (var i = 0; i < itineraries.length; i++) {
     }
   );
 }
+
 console.log("itinerariesSql", itinerariesSql.length);
 console.log("segmentsSql", segmentsSql.length);
 console.log("legsSql", legsSql.length);
 console.log("dates", Object.values(dates).length);
 console.log("stops", stops.length);
+
+// const { Client } = require('pg')
+// const client = new Client()
+// await client.connect()
+
+// const text = 'INSERT INTO users(name, email) VALUES($1, $2) RETURNING *'
+// const values = ['brianc', 'brian.m.carlson@gmail.com']
+
+// // promise
+// client
+//   .query(text, values)
+//   .then(res => {
+//     console.log(res.rows[0])
+//     // { name: 'brianc', email: 'brian.m.carlson@gmail.com' }
+//   })
+//   .catch(e => console.error(e.stack))
