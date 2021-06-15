@@ -23,6 +23,7 @@ const {
   generatePlaces,
   arrayToMap,
   generateItineraries,
+  generateFacts
 } = require("./generator");
 
 const { airports, cities, countries } = generatePlaces(filteredAirports);
@@ -35,7 +36,7 @@ const dateLimit = {
 const stopsProbability = 0.3;
 
 // 10 million itineraries
-const quantity = 700000;
+const quantity = 7000;
 
 const itineraries = generateItineraries(
   {
@@ -164,6 +165,8 @@ for (var i = 0; i < itineraries.length; i++) {
   segmentsId = currentSegmentId;
 }
 
+const factsSQL = generateFacts(itineraries.map(v=>v.itinerary_id));
+
 const generateQueries = () => {
   // const executeQuery = (query, values, client) => client.query(query, values);
 
@@ -260,6 +263,44 @@ const generateQueries = () => {
       );
     }
   );
+  factsSQL.forEach(
+    ({
+      id,
+      flexibility,
+      hits,
+      price,
+      currency,
+      conversion_rate,
+      itinerary_id,
+    }) => {
+      logger.write(
+        `INSERT INTO searchfact VALUES (${id},${flexibility},${hits},${price},'${currency}',${conversion_rate},${itinerary_id});\n`
+      );
+    }
+  );
+  logger.write(
+`UPDATE searchfact
+SET flexibility = flexibility + 1
+WHERE EXISTS(
+    SELECT is_cancelable,itinerary_id FROM itinerary
+    WHERE is_cancelable = true AND  itinerary.itinerary_id = searchfact.itinerary_id
+);`
+  )
+  logger.write(
+`UPDATE searchfact
+SET flexibility = flexibility + 1
+WHERE searchfact.itinerary_id IN (
+    WITH t AS (
+        SELECT itinerary_id, quantity * weight AS total, 
+        AVG(quantity * weight) OVER () AS average
+        FROM itinerary NATURAL JOIN segment NATURAL JOIN baggage
+    )
+    SELECT itinerary_id AS bgaverage
+    FROM t
+    WHERE t.total > t.average
+);
+`)
+  // logger.write("UPDATE searchfact SET flexibility=1 WHERE ;")
   logger.end();
   return;
 };

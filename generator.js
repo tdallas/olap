@@ -255,3 +255,21 @@ const generateLeg = (fromAirport, toAirport, { fromDate, toDate }) => {
     arrival_itinerary_date_id: toDate.itinerary_date_id,
   };
 };
+
+exports.generateFacts = (itineraryIDS) => {
+  const facts = [];
+  let nextID = 0;
+  for (const itineraryID of itineraryIDS) {
+    facts.push({
+      id: nextID,
+      flexibility: 0,
+      hits: Math.random() * (10000-200) + 200,
+      price: Math.random() * (250000 - 100000) + 100000,
+      currency: "ARS",
+      conversion_rate: 157.00,
+      itinerary_id: itineraryID,
+    })
+    nextID++;
+  }
+  return facts;
+};

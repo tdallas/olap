@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS leg(
 
 CREATE TABLE IF NOT EXISTS searchfact(
     id SERIAL PRIMARY KEY,
-    flexibility BOOLEAN,
+    flexibility INTEGER,
     hits INTEGER,
     price DOUBLE PRECISION,
     currency VARCHAR(10),
