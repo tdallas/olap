@@ -284,8 +284,8 @@ SET flexibility = flexibility + 1
 WHERE EXISTS(
     SELECT is_cancelable,itinerary_id FROM itinerary
     WHERE is_cancelable = true AND  itinerary.itinerary_id = searchfact.itinerary_id
-);`
-  )
+);
+`)
   logger.write(
 `UPDATE searchfact
 SET flexibility = flexibility + 1
@@ -298,6 +298,16 @@ WHERE searchfact.itinerary_id IN (
     SELECT itinerary_id AS bgaverage
     FROM t
     WHERE t.total > t.average
+);
+`)
+
+logger.write(
+`UPDATE searchfact
+SET flexibility = flexibility + 1
+WHERE searchfact.itinerary_id IN (
+    SELECT itinerary_id
+    FROM (itinerary NATURAL JOIN segment NATURAL JOIN baggage) AS t
+    WHERE t.included = true
 );
 `)
   // logger.write("UPDATE searchfact SET flexibility=1 WHERE ;")
