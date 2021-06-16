@@ -1,4 +1,5 @@
--- 'ALTA'
+-- ALTA
+-- @block
 WITH timeit AS (
     SELECT itinerary_id, 
     MIN(TO_TIMESTAMP(CONCAT(
@@ -37,6 +38,7 @@ ORDER BY flexibility DESC,normalizedPrice ASC, hits DESC
 LIMIT 10;
 
 -- MEDIA
+-- @block
 WITH timeit AS (
     SELECT itinerary_id, 
     MIN(TO_TIMESTAMP(CONCAT(
@@ -75,6 +77,7 @@ ORDER BY flexibility DESC,normalizedPrice ASC, hits DESC
 LIMIT 10;
 
 -- BAJA
+-- @block
 WITH timeit AS (
     SELECT itinerary_id, 
     MIN(TO_TIMESTAMP(CONCAT(
